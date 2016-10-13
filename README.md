@@ -1,0 +1,2 @@
+# spryTS
+TypeScript Sprite Lib
