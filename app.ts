@@ -1,30 +1,56 @@
-declare var canvasContext: CanvasRenderingContext2D;
+declare let canvasContext: CanvasRenderingContext2D;
 
-class SpryT{
-    private sprite: HTMLImageElement   
+class SprytAnimation{
+    public FirstFrameIndex: number;
+    public LastFrameIndex: number;
 
-    constructor(sprite){
-        this.sprite = sprite
+    constructor(firstFrameIndex: number, lastFrameIndex: number){
+        this.FirstFrameIndex = firstFrameIndex;
+        this.LastFrameIndex = lastFrameIndex;
+    }
+}
+
+class Spryt {
+    private sprite: HTMLImageElement
+    private frameWidth: number;
+    private frameHeight: number;
+    private animations: {[name: string]: SprytAnimation;} = {};
+    private animationFrameIndex: number = 0;
+
+    constructor(sprite: HTMLImageElement, frameWidth: number, frameHeight: number, defaultAnimation: SprytAnimation) {
+        this.sprite = sprite;
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
+        this.animations['default'] = defaultAnimation;
     }
 
-    public Draw(){
-        canvasContext.drawImage(this.sprite, 0, 0);
-    } 
+    public Draw(x: number, y: number) {
+        if(this.animationFrameIndex > this.animations['default'].LastFrameIndex)
+        {
+            this.animationFrameIndex = 0;
+        }
+
+        let frameX = (this.animationFrameIndex+1)*this.frameWidth;
+        canvasContext.drawImage(this.sprite, frameX, 0, this.frameWidth, this.frameHeight, x, y, this.frameWidth, this.frameHeight);
+        
+        this.animationFrameIndex++;
+    }
 }
 
 class Startup {
     public static main() {
         window.onload = () => {
-            var canvas = <HTMLCanvasElement>document.getElementById("canvas");
+            let canvas = <HTMLCanvasElement>document.getElementById("canvas");
             canvasContext = canvas.getContext("2d");
 
-            var sprite = new Image();
+            let sprite = new Image();
             sprite.src = "coin-sprite.png";
 
-            var spryt = new SpryT(sprite);
+            let spryt = new Spryt(sprite, 100, 100, new SprytAnimation(0,9));
 
             window.setInterval(function () {
-                spryt.Draw();
+                canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+                spryt.Draw(10, 10);
             }, 100);
         }
     }
