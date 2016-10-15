@@ -43,13 +43,13 @@ class Spryt {
             this.animationFrameIndex = 0;
         }
 
-        let frameX = (this.animationFrameIndex + 1) * this.frameWidth;
+        let frameX = (this.animationFrameIndex) * this.frameWidth;
         let frameY = (this.currentAnimation.Settings.Row) * this.frameHeight;
         canvasContext.drawImage(this.sprite, frameX, frameY, this.frameWidth, this.frameHeight, x, y, this.frameWidth, this.frameHeight);
 
         this.animationFrameIndex++;
 
-        console.log((this.animationFrameIndex > this.currentAnimation.Settings.LastFrameIndex) + " | " + this.animationFrameIndex + " | " + frameX + " | " + frameY);
+        //console.log((this.animationFrameIndex > this.currentAnimation.Settings.LastFrameIndex) + " | " + this.animationFrameIndex + " | " + frameX + " | " + frameY);
     }
 
     public AddAnimation(sprytAnimation: SprytAnimation) {
@@ -77,16 +77,17 @@ class Startup {
             let spryt = new Spryt(sprite, 100, 100, animation1);
             spryt.AddAnimation(animation2);
 
+            spryt.SetAnimation('animation2');
+
             let ticks = 0
             window.setInterval(function () {
                 canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-
-                if(ticks > 9){
-                    spryt.SetAnimation('animation2')
+                
+                if(ticks === 9){
+                    spryt.SetAnimation('animation1');
                 }
-                else if(ticks < 9) {
-                    ticks++;
-                }
+                
+                ticks++;
 
                 spryt.Draw(10, 10);
             }, 100);
