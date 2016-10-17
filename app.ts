@@ -1,24 +1,16 @@
 declare let canvasContext: CanvasRenderingContext2D;
 
-class SprytAnimationSettings {
+class SprytAnimation {
+    public Name: string;
     public Row: number;
     public FirstFrameIndex: number;
     public LastFrameIndex: number;
 
-    constructor(row: number, firstFrameIndex: number, lastFrameIndex: number) {
+    constructor(name: string, row: number, firstFrameIndex: number, lastFrameIndex: number) {
+        this.Name = name;
         this.Row = row;
         this.FirstFrameIndex = firstFrameIndex;
         this.LastFrameIndex = lastFrameIndex;
-    }
-}
-
-class SprytAnimation {
-    public Name: string;
-    public Settings: SprytAnimationSettings;
-
-    constructor(name: string, row: number, firstFrameIndex: number, lastFrameIndex: number) {
-        this.Name = name;
-        this.Settings = new SprytAnimationSettings(row, firstFrameIndex, lastFrameIndex)
     }
 }
 
@@ -39,17 +31,15 @@ class Spryt {
     }
 
     public Draw(x: number, y: number) {
-        if (this.animationFrameIndex > this.currentAnimation.Settings.LastFrameIndex) {
+        if (this.animationFrameIndex > this.currentAnimation.LastFrameIndex) {
             this.animationFrameIndex = 0;
         }
 
         let frameX = (this.animationFrameIndex) * this.frameWidth;
-        let frameY = (this.currentAnimation.Settings.Row) * this.frameHeight;
+        let frameY = (this.currentAnimation.Row) * this.frameHeight;
         canvasContext.drawImage(this.sprite, frameX, frameY, this.frameWidth, this.frameHeight, x, y, this.frameWidth, this.frameHeight);
 
         this.animationFrameIndex++;
-
-        //console.log((this.animationFrameIndex > this.currentAnimation.Settings.LastFrameIndex) + " | " + this.animationFrameIndex + " | " + frameX + " | " + frameY);
     }
 
     public AddAnimation(sprytAnimation: SprytAnimation) {
@@ -59,6 +49,10 @@ class Spryt {
     public SetAnimation(name: string) : void {
         this.currentAnimation = this.animations[name];
         this.animationFrameIndex = 0;
+    }
+
+    public GetCurrentAnimation(){
+        return this.currentAnimation.Name;
     }
 }
 
