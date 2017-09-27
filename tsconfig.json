@@ -2,6 +2,11 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "sourceMap": true
-    }
+        "declaration": true,
+        "sourceMap": true,
+        "outDir": ""
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
 }
